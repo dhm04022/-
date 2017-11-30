@@ -1,0 +1,70 @@
+///////////////////////////////////////////////////////////////////////////////////
+////////자율 주행 하다가 벽에 가까이 가면 멈추고 모든 LED를 3번 껐다 키기//////////
+///////////////////////////////////////////////////////////////////////////////////
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "Altino.h"
+int forward_speed=300;
+int backward_speed=-350;
+void Autonomous(int ir1, int ir2, int ir3);
+
+int main()
+{
+    SensorData data;
+    int ir1, ir2, ir3, ir4;
+    int i;
+
+    Open(szPort);
+    while(1){
+        data=Sensor(1);
+        ir1=data.IRSensor[0];
+        ir2=data.IRSensor[1];
+        ir3=data.IRSensor[2];
+        cds=data.CDSSensor;
+        if(ir1>50 && ir2>50 && ir3>50)  
+            break;
+        Autonomous(ir1, ir2, ir3);
+    }
+
+    Go(0,0);
+
+    Steering(2);
+    for(i = 0; i < 3; i++){
+        Led(0xC0FF);
+        delay(500);
+        Led(0);
+        delay(500);
+    }
+    
+    Close();
+
+    return 0;
+}
+
+void Autonomous(int ir1, int ir2, int ir3){
+    if(ir1>15 && ir2>15 && ir3>15){         //앞에 3개 센서값이 모두 15보다 크면
+        Go(backward_speed, backward_speed); //왼쪽으로 후진하기
+        Steering(1);
+    }
+    else if(ir1>15 && ir2>15){              //앞의 왼쪽과 중앙 센서가 15보다 크면
+        Go(backward_speed, backward_speed);
+        Steering(1);                        //왼쪽으로 후진하기
+    }
+    else if(ir1>15){                        //앞의 왼쪽 센서가 15보다 크면
+        Go(backward_speed, backward_speed);
+        Steering(1);                        //왼쪽으로 후진하기
+    }
+    else if(ir2>15 && ir3>15){              //중앙과 앞의 오른쪽 센서가 15보다 크면
+        Go(backward_speed, backward_speed);
+        Steering(3);                        //오른쪽으로 후진하기
+    }
+    else if(ir3>15){                        //앞의 오른쪽 센서가 15보다 크면
+        Go(backward_speed, backward_speed); //오른쪽으로 후진
+        Steering(3);
+    }
+    else{                                   //어느 것도 아닐 때 직진
+        Go(forward_speed, forward_speed);   //아마도 양쪽에 벽이 세워져 있으면 직진 하는 듯?
+        Steering(2);
+    }
+}

@@ -1,0 +1,28 @@
+이동 궤적을 깃허브에 올려야 함.
+
+지자기 센서 XYZ를 이용
+
+int main()
+{
+    SensorData sdata;
+    double saveData[3][MAX];     //값을 얼마나 자주 받아야 할지 모름..
+    int i, n = 0;
+
+    Open(szPort);
+
+    while(1){                   //주행 할 때 데이터를 받아야 하니까 주행 시작 후 조건을 넣어야 함
+        sdata = Sensor(1);      //주행 하는 동안 데이터를 계속 받기
+        saveData[0][n] = sdata.MSensor[0];
+        saveData[1][n] = sdata.MSensor[1];
+        saveData[2][n] = sdata.MSensor[2];
+        n++;
+        if(n != 0){
+            if(saveData[0][n] == saveData[0][0] && saveData[1][n] == saveData[0][0] && saveData[2][n] && saveData[2][0])
+                break;          //처음 센서 값과 같은 곳에 오면 주행 멈추기
+        }	//아마도 지자기 센서가 인식하는 완전 똑같은 값에 오지 않을 거기 때문에 어느 정도 범위 내에 들어오면 주행 멈추기
+    }
+
+    Close();
+
+    return 0;
+}
