@@ -27,7 +27,7 @@
 			Go(0, 0);
 		}*/
 
-		Go(400, 400);
+/*		Go(400, 400);
 
 		if (sdata.IRSensor[0] > 100 || sdata.IRSensor[1] > 200 || sdata.IRSensor[2]> 100)
 		{
@@ -40,7 +40,7 @@
 
 	}*/
 
-	Close();
+/*	Close();
 
 	return 0;
 }
