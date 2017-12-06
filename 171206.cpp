@@ -1,20 +1,21 @@
 ﻿#include "Altino.h"
 #include <stdio.h>
-#define SPEED 400
-int main(){    int i=1;    int i0, i1, i2;    SensorData dat;
+#define SPEED 100
+int main(){    
+	int i=1;    int i0, i1, i2,i3;    SensorData dat;
     Open(szPort);
     while(1)    {
         dat = Sensor(10);
         i0 = dat.IRSensor[0]; 
         i1 = dat.IRSensor[1];     
         i2 = dat.IRSensor[2];
-        //       int i3 = dat.IRSensor[3];
-        //       int i4 = dat.IRSensor[4];
-        printf("%d %d %d\n", i0, i1, i2);   
+        i3 = dat.IRSensor[3];
+        printf("%d %d %d %d\n", i0, i1, i2, i3);   
+
         Steering(2);      
         Go(SPEED,SPEED);    
         Sleep(100);
-        if(i0 > 0 || i1 > 0 || i2 > 0)     
+        if((i0 > 0 && i1 > 0)&&(i1 >0 || i2 > 0))     
         {         
           if(i0>=i2){           
             Steering(1);          
@@ -28,7 +29,7 @@ int main(){    int i=1;    int i0, i1, i2;    SensorData dat;
             i1 = dat.IRSensor[1];    
             i2 = dat.IRSensor[2];    
           }        
-          else {    
+          else if (i0<i2) {    
             Steering(3);    
             Go(-SPEED,-SPEED);   
             Sleep(500);     
@@ -39,12 +40,37 @@ int main(){    int i=1;    int i0, i1, i2;    SensorData dat;
             i0 = dat.IRSensor[0];      
             i1 = dat.IRSensor[1];       
             i2 = dat.IRSensor[2];         
-            }         
+            }
+		  if(i2>0 && i1>0)
+		  {
+			  Steering(1);
+			  Go(-SPEED,-SPEED);  
+			  Sleep(3000);
+			  Steering(2);
+			  Go(SPEED,SPEED);      
+			Sleep(500);  
+			Steering(3);
+			Go(SPEED,SPEED);      
+			Sleep(1000);  
+		  }
+	
+
           dat = Sensor(10);     
           i0 = dat.IRSensor[0];  
           i1 = dat.IRSensor[1];  
           i2 = dat.IRSensor[2];  
           }  
+
+			  if(i3<20)
+		  {
+			  Steering(1);
+			  Go(-SPEED,-SPEED);  
+			  Sleep(3000);
+			  Steering(3);
+			  Go(SPEED,SPEED); 
+			  Sleep(1000);
+
+		  }
         }
     Close();
 }
