@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1512724847 source:c:\users\pc\desktop\altino\altino1208\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Altino.h"
+
+1510026221 c:\users\pc\desktop\altino\altino1208\altino.h
+	<stdio.h>
+	<windows.h>
+
